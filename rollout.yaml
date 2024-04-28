@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: my-website
+spec:
+  replicas: 6
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: my-website
+  template:
+    metadata:
+      labels:
+        app: my-website
+    spec:
+      containers:
+      - name: my-website
+        image: jayantkolapkar/my-website:v1
+        ports:
+        - containerPort: 3000
